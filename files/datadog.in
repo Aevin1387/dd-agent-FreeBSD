@@ -11,6 +11,8 @@
 #
 # datadog_enable (bool):  Set to NO by default.
 #       Set it to YES to enable datadog.
+# datadog_config (path):  Set to %%ETCDIR%%.conf
+#       by default.
 # datadog_user (username):      Set to root by default.
 #
 
@@ -39,10 +41,8 @@ ddagent="%%PYTHON_SITELIBDIR%%/datadog/ddagent.py"
 
 required_files="${supervisord_config} ${datadog_config}"
 
-extra_commands="reload info configcheck check jmx"
+extra_commands="reload info configcheck check"
 
-start_cmd="${name}_start"
-stop_cmd="${name}_stop"
 reload_cmd="${name}_reload"
 info_cmd="${name}_info"
 configcheck_cmd="${name}_configcheck"
@@ -50,38 +50,32 @@ check_cmd="${name}_check"
 
 datadog_reload()
 {
-        echo "Not implemented"
+  echo "Not implemented"
 }
 
 datadog_info()
 {
-        ${command_interpreter} ${agent} info $@
+  ${command_interpreter} ${agent} info $@
         RETURN_VALUE=$?
-        #${command_interpreter} ${dogstatsd} info
-        #RETURN_VALUE=$(($RETURN_VALUE || $?))
-        #${command_interpreter} ${ddagent} info
-        #RETURN_VALUE=$(($RETURN_VALUE || $?))
+        ${command_interpreter} ${dogstatsd} info
+        RETURN_VALUE=$(($RETURN_VALUE || $?))
+        ${command_interpreter} ${ddagent} info
+        RETURN_VALUE=$(($RETURN_VALUE || $?))
+  echo $RETURN_VALUE
         exit $RETURN_VALUE
-}
-
-datadog_start()
-{
-        su -m ${datadog_user} -c "${command_interpreter} ${agent} start"
-}
-
-datadog_stop()
-{
-        su -m ${datadog_user} -c "${command_interpreter} ${agent} stop"
 }
 
 datadog_configcheck()
 {
-        su -m ${datadog_user} -c "${command_interpreter} ${agent} configcheck"
+  ${command_interpreter} ${agent} configcheck
+  exit $?
 }
 
 datadog_check()
 {
-        #shift
-        su -m ${datadog_user} -c "${command_interpreter} ${agent} check $@"
-        exit $?
+  #shift
+  ${command_interpreter} ${agent} check $@
+  exit $?
 }
+
+run_rc_command "$@"

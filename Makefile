@@ -20,6 +20,7 @@ RUN_DEPENDS=	${PYTHON_PKGNAMEPREFIX}yaml>=3.11:${PORTSDIR}/devel/py-yaml \
 		${PYTHON_PKGNAMEPREFIX}boto>=2.36.0:${PORTSDIR}/devel/py-boto \
 		${PYTHON_PKGNAMEPREFIX}ntplib>=0.3.3:${PORTSDIR}/net/py-ntplib \
 		${PYTHON_PKGNAMEPREFIX}requests>=2.6.0:${PORTSDIR}/www/py-requests \
+		${PYTHON_PKGNAMEPREFIX}supervisor>=3.0:${PORTSDIR}/sysutils/py-supervisor \
 		${PYTHON_PKGNAMEPREFIX}psutil>=2.1.1:${PORTSDIR}/sysutils/py-psutil
 TEST_DEPENDS:=	${PYTHON_PKGNAMEPREFIX}mock>=1.0.1:${PORTSDIR}/devel/py-mock \
 		${PYTHON_PKGNAMEPREFIX}nose>=1.3.4:${PORTSDIR}/devel/py-nose \
