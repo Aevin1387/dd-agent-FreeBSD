@@ -13,7 +13,7 @@ LICENSE_FILE=	${WRKSRC}/LICENSE
 BUILD_DEPENDS=	${PYTHON_PKGNAMEPREFIX}yaml>=3.11:${PORTSDIR}/devel/py-yaml \
 		${PYTHON_PKGNAMEPREFIX}simplejson>=3.6.3:${PORTSDIR}/devel/py-simplejson \
 		${PYTHON_PKGNAMEPREFIX}tornado>=3.2.2:${PORTSDIR}/www/py-tornado \
-		${PYTHON_PKGNAMEPREFIX}requests>=2.6.0:${PORTSDIR}/www/py-requests
+    ${PYTHON_PKGNAMEPREFIX}requests>=2.6.0:${PORTSDIR}/www/py-requests
 RUN_DEPENDS=	${PYTHON_PKGNAMEPREFIX}yaml>=3.11:${PORTSDIR}/devel/py-yaml \
 		${PYTHON_PKGNAMEPREFIX}simplejson>=3.6.3:${PORTSDIR}/devel/py-simplejson \
 		${PYTHON_PKGNAMEPREFIX}tornado>=3.2.2:${PORTSDIR}/www/py-tornado \
@@ -46,7 +46,7 @@ UID_FILES=	${PATCHDIR}/UIDs
 DATADOGUSER?=	datadog
 DATADOGGROUP?=	datadog
 USERS=		${DATADOGUSER}
-GROUPS=         ${DATADOGGROUP}
+GROUPS=		${DATADOGGROUP}
 
 SUB_FILES=	supervisord.conf pkg-message
 SUB_LIST=	PIDDIR=${PIDDIR} \
@@ -54,7 +54,7 @@ SUB_LIST=	PIDDIR=${PIDDIR} \
 		PYTHON_SITELIBDIR=${PYTHON_SITELIBDIR} \
 		PYTHON_CMD=${PYTHON_CMD}
 
-PLIST_SUB=	PIDDIR=${PIDDIR} LOGDIR=${LOGDIR} DATADOGUSER=${DATADOGUSER} DATADOGGROUP=${DATADOGGROUP}
+PLIST_SUB=	PIDDIR=${PIDDIR} LOGDIR=${LOGDIR}
 
 CONFFILES=	conf.d/*
 CHECKFILES=	checks.d/*
@@ -76,13 +76,17 @@ post-install:
 		${MKDIR} ${STAGEDIR}${LOGDIR}
 		${MKDIR} ${STAGEDIR}${DOCSDIR}
 		${MKDIR} ${STAGEDIR}${EXAMPLESDIR}
+
 		${MKDIR} ${STAGEDIR}${PYTHON_SITELIBDIR}/${PORTNAME}/checks.d
+
+		${INSTALL_DATA} ${WRKDIR}/supervisord.conf ${STAGEDIR}${ETCDIR}
+		${INSTALL_DATA} ${WRKSRC}/datadog-cert.pem ${STAGEDIR}${PYTHON_SITELIBDIR}/${PORTNAME}
+
+		${INSTALL_DATA} ${WRKDIR}/supervisord.conf ${STAGEDIR}${ETCDIR}
 
 .for i in ${CHECKFILES}
 		${INSTALL_DATA} ${WRKSRC}/${i} ${STAGEDIR}${PYTHON_SITELIBDIR}/${PORTNAME}/checks.d
 .endfor
-
-		${INSTALL_DATA} ${WRKSRC}/datadog.conf.example ${STAGEDIR}${ETCDIR}/${PORTNAME}.conf.sample
 
 .for i in ${CONFFILES}
 	        ${INSTALL_DATA} ${WRKSRC}/${i} ${STAGEDIR}${EXAMPLESDIR}
@@ -91,9 +95,6 @@ post-install:
 .for i in ${PORTDOCS}
 		${INSTALL_DATA} ${WRKSRC}/${i} ${STAGEDIR}${DOCSDIR}
 .endfor
-
-		${INSTALL_DATA} ${WRKDIR}/supervisord.conf ${STAGEDIR}${ETCDIR}
-		${INSTALL_DATA} ${WRKSRC}/datadog-cert.pem ${STAGEDIR}${PYTHON_SITELIBDIR}/${PORTNAME}
 
 regression-test: build
 		@cd ${WRKSRC} && ${PYTHON_CMD} ${PYSETUP} test
