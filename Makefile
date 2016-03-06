@@ -48,7 +48,7 @@ DATADOGGROUP?=	datadog
 USERS=		${DATADOGUSER}
 GROUPS=         ${DATADOGGROUP}
 
-SUB_FILES=	pkg-message
+SUB_FILES=	supervisord.conf pkg-message
 SUB_LIST=	PIDDIR=${PIDDIR} \
 		LOGDIR=${LOGDIR} \
 		PYTHON_SITELIBDIR=${PYTHON_SITELIBDIR} \
@@ -92,6 +92,7 @@ post-install:
 		${INSTALL_DATA} ${WRKSRC}/${i} ${STAGEDIR}${DOCSDIR}
 .endfor
 
+		${INSTALL_DATA} ${WRKDIR}/supervisord.conf ${STAGEDIR}${ETCDIR}
 		${INSTALL_DATA} ${WRKSRC}/datadog-cert.pem ${STAGEDIR}${PYTHON_SITELIBDIR}/${PORTNAME}
 
 regression-test: build
