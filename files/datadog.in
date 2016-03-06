@@ -24,7 +24,7 @@ rcvar=datadog_enable
 load_rc_config $name
 
 : ${datadog_enable:="NO"}
-: ${datadog_config="%%ETCDIR%%.conf"}
+: ${datadog_config="%%ETCDIR%%/datadog.conf"}
 : ${datadog_user="root"}
 
 supervisord_config="%%ETCDIR%%/supervisord.conf"
