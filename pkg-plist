@@ -1,4 +1,5 @@
 @sample(%%DATADOGUSER%%,%%DATADOGGROUP%%,640) %%ETCDIR%%/datadog.conf.sample
+%%ETCDIR%%/supervisord.conf
 %%PYTHON_SITELIBDIR%%/%%DATADOGUSER%%/checks.d/activemq_xml.py
 %%PYTHON_SITELIBDIR%%/%%DATADOGUSER%%/checks.d/agent_metrics.py
 %%PYTHON_SITELIBDIR%%/%%DATADOGUSER%%/checks.d/apache.py
